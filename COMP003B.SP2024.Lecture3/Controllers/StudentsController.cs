@@ -99,5 +99,46 @@ namespace COMP003B.SP2024.Lecture3.Controllers
 
             return View (student);
         }
+
+        // GET: Students/Delete/5
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            // TODO: null check
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // TODO: find student by id
+            var student = _students.FirstOrDefault(s => s.Id == id);
+
+            // TODO: null check after searching the list
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            // TODO: returns the view of the student found form the list
+            return View(student);
+        }
+
+        // POST: Students/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            // TODO: look for student in list
+            var student = _students.FirstOrDefault(s => s.Id == id);
+
+            // TODO: student found in list
+            if (student != null)
+            {
+                // TODO: remove student from list
+                _students.Remove(student);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
