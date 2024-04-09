@@ -16,6 +16,7 @@ namespace COMP003B.SP2024.Lecture3.Controllers
         }
 
         // GET: Students/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -41,6 +42,62 @@ namespace COMP003B.SP2024.Lecture3.Controllers
             }
 
             return View();
+        }
+
+        // GET: Students/Edit/5
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        { 
+            // TODO: check if id is null
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // TODO: find student by id
+            var student = _students.FirstOrDefault(p => p.Id == id);
+
+            // TODO: check again if student is null after searching the list
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            // TODO: return student to view
+            return View(student);
+
+        }
+
+        // POST: Students/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Student student)
+        {
+            // TODO: check if id is the same as student id
+            if (id != student.Id)
+            {
+                return NotFound();
+            }
+
+            // TODO: check if model state is valid
+            if (ModelState.IsValid)
+            {
+                // TODO: search for student in list
+                var existingStudent = _students.FirstOrDefault(s => s.Id == student.Id);
+
+                // TODO: chec if student found
+                if (existingStudent != null)
+                {
+                    // TODO: update student details
+                    existingStudent.Name = student.Name;
+                    existingStudent.Age = student.Age;
+                }
+
+                //TODO: redirect back to index
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View (student);
         }
     }
 }
